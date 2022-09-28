@@ -1,17 +1,15 @@
-import { React, Component } from 'react';
+import { useState } from 'react';
 import { nanoid } from 'nanoid';
 import ContactForm from './ContactForm/ContactForm';
 import Filter from './Filter/Filter';
 import ContactList from './ContactList/ContactList';
 
-class App extends Component {
-  state = {
-    contacts: [],
-    filter: '',
-  };
+const App = () => {
+  const [contacts, setContacts] = useState([]);
+  const [filter, setFilter] = useState('');
 
-  addContact = ({ name, number }) => {
-    if (this.state.contacts.find(contact => contact.name === name)) {
+  const addContact = ({ name, number }) => {
+    if (contacts.find(contact => contact.name === name)) {
       alert(`${name} is already in contacts`);
       return;
     }
@@ -22,22 +20,20 @@ class App extends Component {
       number,
     };
 
-    this.setState(prevStat => ({
-      contacts: [newContact, ...prevStat.contacts],
-    }));
+    setContacts(prevState => [newContact, ...prevState]);
   };
 
-  findContact = searchName => {
-    this.setState({ filter: searchName });
+  const findContact = searchName => {
+    setFilter(searchName);
   };
 
-  deleteContact = contactId => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.id !== contactId),
-    }));
+  const deleteContact = contactId => {
+    setContacts(prevState =>
+      prevState.filter(contact => contact.id !== contactId)
+    );
   };
 
-  styleDefault = {
+  const styleDefault = {
     height: '100vh',
     display: 'flex',
     flexDirection: 'column',
@@ -47,35 +43,33 @@ class App extends Component {
     color: '#010101',
   };
 
-  componentDidMount() {
-    const contactsInLocalStorage = JSON.parse(localStorage.getItem('contacts'));
-    if (contactsInLocalStorage)
-      this.setState({ contacts: contactsInLocalStorage });
-  }
+  // const componentDidMount() {
+  //   const contactsInLocalStorage = JSON.parse(localStorage.getItem('contacts'));
+  //   if (contactsInLocalStorage)
+  //     this.setState({ contacts: contactsInLocalStorage });
+  // }
 
-  componentDidUpdate(prevProps, prevState) {
-    console.log('App component was update');
-    if (this.state.contacts !== prevState.contacts)
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  //   console.log('App component was update');
+  //   if (this.state.contacts !== prevState.contacts)
+  //     localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+  // }
 
-  render() {
-    const normalizedFilter = this.state.filter.toLowerCase();
-    const visibleContacts = this.state.contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalizedFilter)
-    );
+  const normalizedFilter = filter.toLowerCase();
+  const visibleContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().includes(normalizedFilter)
+  );
 
-    return (
-      <div style={this.styleDefault}>
-        React homework template
-        <h1>Phonebook</h1>
-        <ContactForm onSubmit={this.addContact} />
-        <h2>Contacts</h2>
-        <Filter value={this.state.filter} onSearch={this.findContact} />
-        <ContactList contacts={visibleContacts} onDelete={this.deleteContact} />
-      </div>
-    );
-  }
-}
+  return (
+    <div style={styleDefault}>
+      React homework template
+      <h1>Phonebook</h1>
+      <ContactForm onSubmit={addContact} />
+      <h2>Contacts</h2>
+      <Filter value={filter} onSearch={findContact} />
+      <ContactList contacts={visibleContacts} onDelete={deleteContact} />
+    </div>
+  );
+};
 
 export default App;
