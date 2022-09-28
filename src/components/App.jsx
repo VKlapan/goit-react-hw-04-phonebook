@@ -49,18 +49,6 @@ const App = () => {
     color: '#010101',
   };
 
-  // const componentDidMount() {
-  //   const contactsInLocalStorage = JSON.parse(localStorage.getItem('contacts'));
-  //   if (contactsInLocalStorage)
-  //     this.setState({ contacts: contactsInLocalStorage });
-  // }
-
-  // componentDidUpdate(prevProps, prevState) {
-  //   console.log('App component was update');
-  //   if (this.state.contacts !== prevState.contacts)
-  //     localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-  // }
-
   const normalizedFilter = filter.toLowerCase();
   const visibleContacts = contacts.filter(contact =>
     contact.name.toLowerCase().includes(normalizedFilter)
